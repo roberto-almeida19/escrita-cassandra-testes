@@ -3,9 +3,7 @@ package com.azure.cosmosdb.cassandra.util;
 import com.datastax.driver.core.*;
 
 import javax.net.ssl.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.security.*;
 
 /**
@@ -35,7 +33,7 @@ public class CassandraUtils {
             //Load cassandra endpoint details from config.properties
             loadCassandraConnectionDetails();
 
-            final KeyStore keyStore = KeyStore.getInstance("JKS");
+          /*  final KeyStore keyStore = KeyStore.getInstance("JKS");
             try (final InputStream is = new FileInputStream(sslKeyStoreFile)) {
                 keyStore.load(is, sslKeyStorePassword.toCharArray());
             }
@@ -46,13 +44,13 @@ public class CassandraUtils {
             final TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory
                     .getDefaultAlgorithm());
             tmf.init(keyStore);
-
+*/
             // Creates a socket factory for HttpsURLConnection using JKS contents.
-            final SSLContext sc = SSLContext.getInstance("TLSv1.2");
+       /*     final SSLContext sc = SSLContext.getInstance("TLSv1.2");
             sc.init(kmf.getKeyManagers(), tmf.getTrustManagers(), new java.security.SecureRandom());
-
+*/
             JdkSSLOptions sslOptions = RemoteEndpointAwareJdkSSLOptions.builder()
-                    .withSSLContext(sc)
+
                     .build();
             cluster = Cluster.builder()
                     .addContactPoint(cassandraHost)
@@ -91,7 +89,7 @@ public class CassandraUtils {
         String ssl_keystore_file_path = config.getProperty("ssl_keystore_file_path");
         String ssl_keystore_password = config.getProperty("ssl_keystore_password");
 
-        // If ssl_keystore_file_path, build the path using JAVA_HOME directory.
+       /* // If ssl_keystore_file_path, build the path using JAVA_HOME directory.
         if (ssl_keystore_file_path == null || ssl_keystore_file_path.isEmpty()) {
             String javaHomeDirectory = System.getenv("JAVA_HOME");
             if (javaHomeDirectory == null || javaHomeDirectory.isEmpty()) {
@@ -108,5 +106,19 @@ public class CassandraUtils {
         if (!sslKeyStoreFile.exists() || !sslKeyStoreFile.canRead()) {
             throw new Exception(String.format("Unable to access the SSL Key Store file from %s", ssl_keystore_file_path));
         }
+
+
+        */
     }
+    public static String readFile() throws IOException {
+        File file = new File("/Users/roberto-almeida/azure-cosmos-db-cassandra-java-getting-started/src/main/resources/customer.json");
+        BufferedReader bufferedInputStream = new BufferedReader(new FileReader(file));
+        String retorno = "";
+        String line;
+        while ((line = bufferedInputStream.readLine())!=null){
+            retorno+=line;
+        }
+        return retorno;
+    }
+
 }

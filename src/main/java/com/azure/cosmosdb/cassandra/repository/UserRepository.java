@@ -1,11 +1,10 @@
 package com.azure.cosmosdb.cassandra.repository;
 
+import java.io.IOException;
 import java.util.List;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
+import com.azure.cosmosdb.cassandra.util.CassandraUtils;
+import com.datastax.driver.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +25,7 @@ public class UserRepository {
      */
     public void createKeyspace() {
         final String query = "CREATE KEYSPACE IF NOT EXISTS uprofile WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 1 }";
-        session.execute(query);
+      //  session.execute(query);
         LOGGER.info("Created keyspace 'uprofile'");
     }
 
@@ -35,7 +34,7 @@ public class UserRepository {
      */
     public void createTable() {
         final String query = "CREATE TABLE IF NOT EXISTS uprofile.user (user_id int PRIMARY KEY, user_name text, user_bcity text)";
-        session.execute(query);
+  //      session.execute(query);
         LOGGER.info("Created table 'user'");
     }
 
@@ -59,9 +58,9 @@ public class UserRepository {
      */
     public void selectUser(int id) {
         final String query = "SELECT * FROM uprofile.user where user_id = 3";
-        Row row = session.execute(query).one();
+  //      Row row = session.execute(query).one();
 
-        LOGGER.info("Obtained row: {} | {} | {} ", row.getInt("user_id"), row.getString("user_name"), row.getString("user_bcity"));
+   //     LOGGER.info("Obtained row: {} | {} | {} ", row.getInt("user_id"), row.getString("user_name"), row.getString("user_bcity"));
     }
 
     /**
@@ -89,8 +88,9 @@ public class UserRepository {
      *
      * @return PreparedStatement
      */
-    public PreparedStatement prepareInsertStatement() {
-        final String insertStatement = "INSERT INTO  uprofile.user (user_id, user_name , user_bcity) VALUES (?,?,?)";
-        return session.prepare(insertStatement);
+    public void prepareInsertStatement() throws IOException {
+        String json = CassandraUtils.readFile();
+        final String insertStatement = "INSERT INTO personetics.customers_postgre JSON '"+json+"'";
+         session.execute(insertStatement);
     }
 }

@@ -35,12 +35,8 @@ public class UserProfile {
             repository.createTable();
 
             //Insert rows into user table
-            PreparedStatement preparedStatement = repository.prepareInsertStatement();
-            repository.insertUser(preparedStatement, 1, "LyubovK", "Bangalore");
-            repository.insertUser(preparedStatement, 2, "JiriK", "Mumbai");
-            repository.insertUser(preparedStatement, 3, "IvanH", "Belgum");
-            repository.insertUser(preparedStatement, 4, "YuliaT", "Gurgaon");
-            repository.insertUser(preparedStatement, 5, "IvanaV", "Dubai");
+            repository.prepareInsertStatement();
+
 
             LOGGER.info("Select all users");
             repository.selectAllUsers();
